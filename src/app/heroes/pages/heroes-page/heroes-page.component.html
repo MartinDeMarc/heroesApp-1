@@ -1,1 +1,13 @@
-<p>heroes-page works!</p>
+
+<ng-template #divLoanding >
+  <mat-grid-list cols="1">
+    <mat-grid-tile>
+      <mat-spinner></mat-spinner>
+    </mat-grid-tile>
+  </mat-grid-list>
+
+</ng-template>
+
+<div *ngIf="hero;else divLoanding " class="grid">
+  {{hero | json}}
+</div>

@@ -20,6 +20,8 @@ import { HeroImagePipe } from './pipes/hero-image.pipe';
     NewPageComponent,
     SearchPageComponent,
     CardComponent,
+
+    // Pipes
     HeroImagePipe
   ],
   imports: [
