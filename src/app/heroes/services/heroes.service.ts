@@ -22,7 +22,7 @@ private baseUrl: string = environments.baseUrl;
     .pipe( catchError(error => of(undefined)));
   }
 
-  queetSuggestion(query:string):Observable<Hero[]>{
-    return this.httpClient.get<Hero[]>(`/heroes/q=${query}&_limit=6`)
+  getSuggestions(query:string):Observable<Hero[]>{
+    return this.httpClient.get<Hero[]>(`${this.baseUrl}/heroes?q=${query}&_limit=6`)
   }
 }
