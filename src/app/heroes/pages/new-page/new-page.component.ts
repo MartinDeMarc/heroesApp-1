@@ -9,7 +9,7 @@ import { Publisher } from '../../interfaces/hero.interface';
 })
 export class NewPageComponent {
 
-  public heroFrom = new FormGroup({
+  public heroForm = new FormGroup({
     id: new FormControl<string>(''),
   superhero: new FormControl<string>('', {nonNullable: true}),
   publisher: new FormControl<Publisher>(Publisher.DCComics),
@@ -24,6 +24,16 @@ export class NewPageComponent {
   public publishers = [
    {  id: "Dc Comics", desc: "DC - Comics"},
     {id: "Marvel Comics", desc: "Marvel - Comics"},
-  ]
+  ];
+
+
+
+  onSubmit(){
+    console.log({
+      formIsValid: this.heroForm.valid,
+      value: this.heroForm.value,
+  });
+
+  }
 
 }
