@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, } from '@angular/forms';
-import { Publisher } from '../../interfaces/hero.interface';
+import { Hero, Publisher } from '../../interfaces/hero.interface';
+import { HeroesService } from '../../services/heroes.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-page',
   templateUrl: './new-page.component.html',
   styleUrls: ['./new-page.component.css']
 })
-export class NewPageComponent {
+export class NewPageComponent implements OnInit {
 
   public heroForm = new FormGroup({
     id: new FormControl<string>(''),
@@ -26,13 +28,37 @@ export class NewPageComponent {
     {id: "Marvel Comics", desc: "Marvel - Comics"},
   ];
 
+  constructor( private herosService: HeroesService,
+               private activadedRoute: ActivatedRoute,
+               private router: Router) {}
+
+  get currentHero():Hero{
+    const hero = this.heroForm.value as Hero;
+
+    return hero;
+  }
+
+  ngOnInit(): void {
 
 
-  onSubmit(){
-    console.log({
-      formIsValid: this.heroForm.valid,
-      value: this.heroForm.value,
-  });
+  }
+
+
+  onSubmit():void{
+    if (this.heroForm.invalid) return;
+
+    if(this.currentHero.id) {
+      this.herosService.updateHero(this.currentHero)
+      .subscribe(hero => {
+        // TODO: mostrar snackbar
+      })
+      return;
+    }
+
+    this.herosService.addHero(this.currentHero)
+    .subscribe( hero => {
+      // TODO: mostrar snackbar, y navegar a /heroes/edit/ hero.id
+    });
 
   }
 
