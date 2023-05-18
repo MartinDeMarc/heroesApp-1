@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, } from '@angular/forms';
 import { Hero, Publisher } from '../../interfaces/hero.interface';
 import { HeroesService } from '../../services/heroes.service';
+
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap } from 'rxjs';
+import { switchMap, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-new-page',
@@ -33,7 +36,8 @@ export class NewPageComponent implements OnInit {
   constructor( private herosService: HeroesService,
                private activadedRoute: ActivatedRoute,
                private router: Router,
-               private snackbar: MatSnackBar, ) {}
+               private snackbar: MatSnackBar,
+               private dialog: MatDialog, ) {}
 
   get currentHero():Hero{
     const hero = this.heroForm.value as Hero;
@@ -60,16 +64,33 @@ export class NewPageComponent implements OnInit {
     if(this.currentHero.id) {
       this.herosService.updateHero(this.currentHero)
       .subscribe(hero => {
-        // TODO: mostrar snackbar
+        this.showSnackbar(`${hero.superhero} updated!`);
       })
       return;
     }
 
     this.herosService.addHero(this.currentHero)
     .subscribe( hero => {
-      // TODO: mostrar snackbar, y navegar a /heroes/edit/ hero.id
+      this.router.navigate(['/heroes/edit', hero.id]);
+      this.showSnackbar(`${hero.superhero} created!`);
     });
 
+  }
+
+  onDeleteHero(){
+ if(!this.currentHero.id) throw Error ('Hero id is required');
+
+ const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+  data: this.heroForm.value
+});
+
+dialogRef.afterClosed().subscribe(result => {
+  console.log('The dialog was closed');
+  this.animal = result;
+  }
+
+  showSnackbar(message:string):void {
+    this.snackbar.open(message, 'done', {duration: 2500,})
   }
 
 }
