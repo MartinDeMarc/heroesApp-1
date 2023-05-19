@@ -1,1 +1,9 @@
-<p>confirm-dialog works!</p>
+<h1> mat-dialog-title>Delete Heroe</h1>
+<div mat-dialog-content>
+  Would you like to delete {{data.superhero}}?
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close (click)="onNoClick()">No Thanks</button>
+  <span class="spacer"></span>
+  <button  mat-button color="primary" mat-dialog-close (click)="onConfirm()" cdkFocusInitial>Ok</button>
+</div>

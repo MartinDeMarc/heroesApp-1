@@ -7,7 +7,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap, throwError } from 'rxjs';
+import { switchMap,  } from 'rxjs';
+import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-new-page',
@@ -77,17 +78,27 @@ export class NewPageComponent implements OnInit {
 
   }
 
-  onDeleteHero(){
- if(!this.currentHero.id) throw Error ('Hero id is required');
+   onDeleteHero(){
+    if (this.currentHero.id) throw Error ('Hero id is required');
 
- const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-  data: this.heroForm.value
-});
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: this.heroForm.value
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) return;
 
-dialogRef.afterClosed().subscribe(result => {
-  console.log('The dialog was closed');
-  this.animal = result;
-  }
+      this.herosService.deleteHeroById(this.currentHero.id)
+      .subscribe( wasDelected => {
+        if(wasDelected) {
+          this.router.navigate(['/heroes'])
+
+        }
+      })
+    })
+
+   }
+
+
 
   showSnackbar(message:string):void {
     this.snackbar.open(message, 'done', {duration: 2500,})
