@@ -27,7 +27,7 @@ export class AuthService {
   }
 
 
-  checkAuthentication():Observable<boolean> | boolean {
+  checkAuthentication():Observable<boolean>  {
     if(!localStorage.getItem('user')) return of(false)
 
 
